@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio website</title>
+    <link rel="stylesheet" href="lpg.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="main-container">
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>🔥 LPG AI System</h2>
+            <p>Smart Distribution Dashboard</p>
+
+            <div class="menu">
+                <a href="#">Dashboard</a>
+                <a href="#">Prediction</a>
+                <a href="#">Allocation</a>
+                <a href="#">Crisis Monitor</a>
+            </div>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div class="main-content">
+
+            <h1>📊 Smart LPG Dashboard</h1>
+
+            <!-- INPUT SECTION -->
+            <div class="card">
+                <h2>🔮 Demand Prediction</h2>
+
+                <label>Population</label>
+                <input type="number" id="population">
+
+                <label>Month</label>
+                <input type="number" id="month">
+
+                <label>Festival (0/1)</label>
+                <input type="number" id="festival">
+
+                <label>Past Demand</label>
+                <input type="number" id="pastDemand">
+
+                <button onclick="predictDemand()">Predict</button>
+
+                <h3 id="result">Result: --</h3>
+            </div>
+
+            <!-- RESULT CARDS -->
+            <div class="grid">
+
+                <div class="card">
+                    <h2>⚡ Priority Score</h2>
+                    <p id="priority">--</p>
+                </div>
+
+                <div class="card">
+                    <h2>🚨 Crisis Status</h2>
+                    <p id="crisis">No Data</p>
+                </div>
+
+                <div class="card">
+                    <h2>🔁 Redistribution</h2>
+                    <p id="redistribution">--</p>
+                </div>
+
+                <div class="card">
+                    <h2>⛽ Usage Predictor</h2>
+                    <input type="number" id="capacity" placeholder="Cylinder Capacity">
+                    <input type="number" id="usage" placeholder="Daily Usage">
+                    <button onclick="predictUsage()">Calculate</button>
+                    <p id="days">--</p>
+                </div>
+
+                <div class="card">
+    <h2>📈 Demand Trend</h2>
+    <canvas id="demandChart"></canvas>
+</div>
+<div class="card">
+    <h2>🌍 LPG Distribution Map</h2>
+
+    <div class="map-container">
+        <div id="uttarakhand" class="state">Uttarakhand</div>
+        <div id="up" class="state">Uttar Pradesh</div>
+        
+    </div>
+
+    <p id="mapStatus">Status: --</p>
+</div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JS LOGIC -->
+    <script>
+        let chart; // global chart variable
+
+        function predictDemand() {function predictDemand() {
+
+    let population = parseFloat(document.getElementById("population").value);
+    let month = parseFloat(document.getElementById("month").value);
+    let festival = parseFloat(document.getElementById("festival").value);
+    let past = parseFloat(document.getElementById("pastDemand").value);
+
+    // 🧠 FAKE ML MODEL (Weighted Regression Simulation)
+    let w_population = 0.45;
+    let w_month = 20;
+    let w_festival = 1200;
+    let w_past = 0.35;
+    let bias = 200;
+
+    let demand = 
+        (population * w_population) +
+        (month * w_month) +
+        (festival * w_festival) +
+        (past * w_past) +
+        bias;
+
+    demand = Math.round(demand);
+
+    // 🎯 Confidence Score (fake AI touch)
+    let confidence = (80 + Math.random() * 15).toFixed(2);
+
+    document.getElementById("result").innerText = 
+        `Predicted Demand: ${demand} units (Confidence: ${confidence}%)`;
+
+    // 🚨 Crisis Detection
+    let supply = 5000;
+
+    if (demand > supply) {
+        document.getElementById("crisis").innerText = "🚨 High Demand Crisis";
+        document.getElementById("redistribution").innerText =
+            "Redirect supply from low-demand regions → high-demand regions";
+    } else {
+        document.getElementById("crisis").innerText = "✅ Supply Stable";
+        document.getElementById("redistribution").innerText =
+            "No redistribution required";
+    }
+
+    // ⚡ Priority Score (dynamic)
+    let family_size = Math.floor(Math.random() * 6) + 2;
+    let days_since = Math.floor(Math.random() * 15) + 1;
+    let crisis_level = demand > supply ? 5 : 1;
+
+    let priority = (family_size * 2) + days_since + crisis_level;
+
+    document.getElementById("priority").innerText =
+        `Score: ${priority} (Family: ${family_size}, Days: ${days_since})`;
+}
+            let population = document.getElementById("population").value;
+            let month = document.getElementById("month").value;
+            let festival = document.getElementById("festival").value;
+            let past = document.getElementById("pastDemand").value;
+
+            // Simple ML Logic (demo)
+            let demand = (population * 0.5) + (festival * 100) + (past * 0.3);
+
+            document.getElementById("result").innerText = "Predicted Demand: " + demand;
+
+            // Crisis Detection
+            let supply = 5000;
+            if (demand > supply) {
+                document.getElementById("crisis").innerText = "🚨 Crisis Detected";
+                document.getElementById("redistribution").innerText = "Shift supply from Uttarakhand → Uttar Pradesh";
+            } else {
+                document.getElementById("crisis").innerText = "✅ Stable";
+                document.getElementById("redistribution").innerText = "No Redistribution Needed";
+            }
+
+            // Priority Example
+            let priority = (5 * 2) + 10 + (demand > supply ? 5 : 1);
+            document.getElementById("priority").innerText = priority;
+
+            // 📊 GRAPH DATA (Fake historical trend)
+let labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
+let data = [
+    demand - 800,
+    demand - 600,
+    demand - 400,
+    demand - 200,
+    demand - 100,
+    demand
+];
+
+// Destroy old chart (important)
+if (chart) {
+    chart.destroy();
+}
+
+// Create new chart
+let ctx = document.getElementById("demandChart").getContext("2d");
+
+chart = new Chart(ctx, {
+    type: "line",
+    data: {
+        labels: labels,
+        datasets: [{
+            label: "LPG Demand",
+            data: data,
+            borderWidth: 2,
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                labels: {
+                    color: "white"
+                }
+            }
+        },
+        scales: {
+            x: {
+                ticks: { color: "white" }
+            },
+            y: {
+                ticks: { color: "white" }
+            }
+        }
+    }
+});
+// 🌍 MAP LOGIC
+let uk = document.getElementById("uttarakhand");
+let up = document.getElementById("up");
+
+
+// Reset classes
+uk.className = "state";
+up.className = "state";
+
+
+if (demand > supply) {
+    // Crisis scenario
+    up.classList.add("crisis");
+    uk.classList.add("surplus");
+   
+
+    document.getElementById("mapStatus").innerText =
+        "🔁 Supply shifted from Uttarakhand → Uttar Pradesh";
+} else {
+    // Normal scenario
+    up.classList.add("normal");
+    uk.classList.add("normal");
+    
+
+    document.getElementById("mapStatus").innerText =
+        "✅ All regions stable";
+}
+        }
+
+        function predictUsage() {
+            let cap = document.getElementById("capacity").value;
+            let use = document.getElementById("usage").value;
+
+            let days = cap / use;
+
+            document.getElementById("days").innerText = "Lasts for: " + Math.round(days) + " days";
+        }
+
+
+    </script>
+
+</body>
+</html>
